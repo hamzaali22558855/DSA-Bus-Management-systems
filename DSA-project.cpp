@@ -5,7 +5,7 @@
 #include <sstream>
 using namespace std;
 
-// Structure to store Bus details
+
 struct Bus {
     int busID;
     string driverName;
@@ -14,7 +14,7 @@ struct Bus {
     Bus* next;
 };
 
-// Structure to store Booking details
+
 struct Booking {
     int bookingID;
     int busID;
@@ -22,7 +22,7 @@ struct Booking {
     Booking* next;
 };
 
-// Action structure for Undo operations
+
 struct Action {
     string type;  // "ADD_BUS", "BOOK_TICKET", or "DELETE_BUS"
     int busID;
@@ -31,15 +31,14 @@ struct Action {
 
 class BusTicketManagementSystem {
 private:
-    Bus* busHead;           // Linked list head for buses
-    Booking* bookingHead;   // Linked list head for bookings
-    int bookingCounter;     // Unique booking ID counter
-    stack<Action> undoStack; // Stack for undo actions
+    Bus* busHead;           
+    Booking* bookingHead;
+    int bookingCounter;     
+    stack<Action> undoStack; 
 
 public:
     BusTicketManagementSystem() : busHead(nullptr), bookingHead(nullptr), bookingCounter(1) {}
 
-    // Function to add a new bus
     void addBus() {
         Bus* newBus = new Bus;
 
@@ -59,12 +58,12 @@ public:
         newBus->next = busHead;
         busHead = newBus;
 
-        // Push the action to the undo stack
+        
         undoStack.push({"ADD_BUS", newBus->busID, 0});
         cout << "Bus added successfully!\n";
     }
 
-    // Function to view all buses
+    
     void viewBuses() const {
         if (!busHead) {
             cout << "\nNo buses available.\n";
@@ -82,7 +81,7 @@ public:
         }
     }
 
-    // Function to book a ticket
+    
     void bookTicket() {
         int busID;
         cout << "\nEnter Bus ID for Booking: ";
@@ -115,7 +114,7 @@ public:
         cout << "Ticket booked successfully! Booking ID: " << newBooking->bookingID << "\n";
     }
 
-    // Function to view all bookings
+    
     void viewBookings() const {
         if (!bookingHead) {
             cout << "\nNo bookings available.\n";
@@ -132,7 +131,7 @@ public:
         }
     }
 
-    // Function to save buses and bookings to files
+    
     void saveToFile() const {
         ofstream busFile("buses.txt");
         ofstream bookingFile("bookings.txt");
@@ -142,7 +141,7 @@ public:
             return;
         }
 
-        // Save buses
+        
         Bus* tempBus = busHead;
         while (tempBus) {
             busFile << tempBus->busID << "," << tempBus->driverName << ","
@@ -150,7 +149,7 @@ public:
             tempBus = tempBus->next;
         }
 
-        // Save bookings
+        
         Booking* tempBooking = bookingHead;
         while (tempBooking) {
             bookingFile << tempBooking->bookingID << "," << tempBooking->busID << ","
@@ -161,7 +160,7 @@ public:
         cout << "\nData saved successfully.\n";
     }
 
-    // Function to load buses and bookings from files
+    
     void loadFromFile() {
         ifstream busFile("buses.txt");
         ifstream bookingFile("bookings.txt");
@@ -171,12 +170,12 @@ public:
             return;
         }
 
-        // Clear current data
+       
         clearData();
 
         string line;
 
-        // Load buses
+    
         while (getline(busFile, line)) {
             Bus* newBus = new Bus;
             stringstream ss(line);
@@ -190,7 +189,7 @@ public:
             busHead = newBus;
         }
 
-        // Load bookings
+       
         while (getline(bookingFile, line)) {
             Booking* newBooking = new Booking;
             stringstream ss(line);
@@ -206,7 +205,7 @@ public:
         cout << "\nData loaded successfully.\n";
     }
 
-    // Function to undo the last operation
+    
     void undo() {
         if (undoStack.empty()) {
             cout << "No actions to undo.\n";
@@ -229,7 +228,7 @@ public:
     }
 
 private:
-    // Function to clear all dynamic data
+    
     void clearData() {
         while (busHead) {
             Bus* temp = busHead;
@@ -243,7 +242,7 @@ private:
         }
     }
 
-    // Function to find a bus by ID
+    
     Bus* findBus(int id) const {
         Bus* temp = busHead;
         while (temp) {
@@ -254,7 +253,6 @@ private:
         return nullptr;
     }
 
-    // Function to delete a bus (optionally skipping undo record)
     void deleteBus(int busID, bool recordUndo = true) {
         Bus** current = &busHead;
         while (*current && (*current)->busID != busID) {
@@ -268,7 +266,7 @@ private:
         }
     }
 
-    // Function to cancel a booking (optionally skipping undo record)
+    
     void cancelBooking(int bookingID, bool recordUndo = true) {
         Booking** current = &bookingHead;
         while (*current && (*current)->bookingID != bookingID) {
@@ -283,7 +281,7 @@ private:
     }
 };
 
-// Main program
+
 int main() {
     BusTicketManagementSystem system;
     int choice;
